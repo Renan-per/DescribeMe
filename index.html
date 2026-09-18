@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DescribeMe
+    </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <button class="btn" onclick="aparecer(); ">Home</button>
+        <button class="btn" onclick="esconder();" >Describe images</button>
+    </header>
+    <main>
+        <section id="saved-notes" class="saved-notes">
+            <h1>Saved Descriptions</h1>
+            <div id="boxes-list" class="container">
+            </div>
+
+            <div class="edit-container hide">
+                    <div class="edit-div">
+                        <button class="close-btn" onclick="closeEditBtn()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        <img src="" alt="random img">
+                        <textarea></textarea>
+                        <button class="btn" onclick="saveEditBtn()">Save</button>
+                    </div>
+                </div>
+
+            <div class="confirm-overlay hide">
+                <div class="confirm-box">
+                    <h1>Delete item?</h1>
+                    <p>This will remove your description from your saved descriptions.</p>
+                    <button class="close-btn" onclick="cancelDelete()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    <div class="container-buttons">
+                        <button class="confirm-btn cancel-btn" onclick="cancelDelete()">Keep it</button>
+                        <button class="confirm-btn delete-btn" onclick="deleteBox()">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sabao hide" id="descrever">
+            <div class="container-img">
+                <img src="" alt="random img">
+            </div>
+            
+            <div class="entrada-de-texto">
+                <textarea id="txtbox" placeholder="Describe the image"></textarea>
+                <button  class="btn" onclick="salvarDados()">Save</button>
+                <button  class="btn" onclick="loadImg()">next image</button>
+            </div>
+        </section>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
