@@ -8,7 +8,6 @@ async function newImg() {
     const resposta = await fetch('https://picsum.photos/1920/1080');
     const url = await resposta.url;
     preload.push(url);
-    console.log(preload);
     return url;
 }
 
@@ -20,45 +19,35 @@ async function loadImg() {
     }
 }
 
-function esconder () {
-    document.getElementById("descrever").classList.remove("hide");
-    document.getElementById("saved-notes").classList.add("hide");
+const sections = document.querySelectorAll(".section");
+const headerButtons = document.querySelectorAll('header button')
+
+function findVisibleSection() {
+    return [...sections].find(section => !section.classList.contains('hide'));
 }
 
-function aparecer () {
-    document.getElementById("saved-notes").classList.remove("hide");
-    document.getElementById("descrever").classList.add("hide");
-}
+headerButtons.forEach((btn, btnIndex) => {
+    btn.addEventListener('click', () => {
+        if (sections[btnIndex].classList.contains('hide')) {;
+            findVisibleSection().classList.add('hide');
+            sections[btnIndex].classList.remove('hide');
+        };
+    });
+});  
+
+const date = new Date();
+const year = date.getFullYear();
+const month = date.getMonth() +1;
+const day = date.getDate();
+const hour = date.getHours();
+const minute = date.getMinutes()
 
 function salvarDados () {
     const textarea = document.getElementById('txtbox');
+    const src = document.querySelector(".container-img img").src;
     const content = textarea.value;
     
     if (content !== "") {        
-        const box = document.createElement('div');
-        box.classList.add('box');
-        const img = document.createElement('img');
-        const imgtag = document.querySelector(".container-img img");
-        const src = imgtag.src;
-        img.src = src;
-
-        const p = document.createElement('p');
-        const button = document.createElement('button');
-        button.classList.add('box-delete-btn');
-        button.classList.add('hide');
-        button.onclick = confirmAction;
-        button.innerHTML = `<i class="bi bi-trash"></i>`;
-
-        const boxesList = document.getElementById('boxes-list');
-        boxesList.append(box);
-        box.append(img);
-        box.append(p);
-        box.append(button);
-
-
-        img.append(src);
-        p.append(content);
-
         const boxClass = {
             "img" : src,
             "p" : content,
@@ -73,7 +62,7 @@ function salvarDados () {
         localStorage.setItem('box', jsonString);
         textarea.value = "";
 
-        boxesCounter();
+        loadData();
         loadImg();
     }
 }
@@ -87,11 +76,13 @@ function boxesCounter () {
 
 function loadData () {
     if (localStorage.getItem('box') !== null){
-    const savedData = localStorage.getItem('box');
-    const list = JSON.parse(savedData);
+    const list = JSON.parse(localStorage.getItem('box'));
 
-    list.forEach((value) => {
-        console.log(value);
+    const boxesList = document.getElementById('boxes-list');
+
+    boxesList.innerHTML = "";
+
+    list.forEach(value => {
         const box = document.createElement('div');
         box.classList.add('box');
         const img = document.createElement('img');
@@ -102,18 +93,16 @@ function loadData () {
         button.classList.add('box-delete-btn');
         button.classList.add('hide');
         button.onclick = confirmAction;
-        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>`;
+        button.innerHTML = `<i class="bi bi-trash"></i>`;
 
-        const boxesList = document.getElementById('boxes-list');
-
-        boxesList.append(box);
         box.append(img);
         box.append(p);
         box.append(button);
-        
+
+        boxesList.append(box);
         
         boxesCounter ();
-    })};}
+    });};};
     
 let boxPTemporary;
 let boxEditingIndex;
@@ -145,19 +134,17 @@ function deleteBox () {
 
 const box = document.querySelectorAll('.box');
 
-console.log(box)
-
-box.forEach((btn) => {
-    btn.addEventListener('mouseover', function(event) {
-        const button = event.currentTarget.querySelector('.box-delete-btn');
-        button.classList.remove('hide');
-    });
-
+function optionsButton ()  {
+    box.forEach((btn) => {
+        btn.addEventListener('mouseover', function(event) {
+            const button = event.currentTarget.querySelector('.box-delete-btn');
+            button.classList.remove('hide');
+        });
         btn.addEventListener('mouseout', function(event) {
-        const button = event.currentTarget.querySelector('.box-delete-btn');
-        button.classList.add('hide');
-    });
-});
+            const button = event.currentTarget.querySelector('.box-delete-btn');
+            button.classList.add('hide');
+        });
+    })};
 
 function loadEditData() {
     box.forEach((div, index) => {
@@ -179,8 +166,6 @@ function loadEditData() {
 });};
 
 function saveEditBtn () {
-    // fazer a lógica de como ele vai pegar os dados novos da edição e salvar
-    console.log(boxEditingIndex)
     const editTxtarea = document.querySelector(".edit-div textarea");
     if (editTxtarea.value !== boxPTemporary.textContent) {
         boxPTemporary.textContent = editTxtarea.value;
@@ -197,4 +182,5 @@ function closeEditBtn () {
     document.querySelector(".edit-container").classList.add("hide");
 }
 
+optionsButton();
 loadEditData();

@@ -69,6 +69,13 @@ main {
     box-shadow: 0 0 20px 5px rgba(71, 71, 71, 0.158);
 }
 
+.box span {
+    cursor: text;
+    background-color: rgba(23, 23, 26, 0.4);
+    color: #E8EAED;
+    font-size: 16px;
+}
+
 .box img {
     height: 200px;
     max-width: 100%;
